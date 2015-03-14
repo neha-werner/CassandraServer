@@ -1,0 +1,61 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET     /                           controllers.Application.index()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.at(path="/public", file)
+
+
+#Read From Cassandra
+POST /getDataFromCassandra    controllers.Application.getDataFromCassandra()
+
+#Delete Keyspace
+POST /deleteKeyspace    controllers.Application.deleteKeyspace()
+OPTIONS   /deleteKeyspace    controllers.Application.checkPreFlight()
+
+#Describe Keyspaces
+POST /getKeyspaces	controllers.Application.getKeyspaces()
+OPTIONS   /getKeyspaces    controllers.Application.checkPreFlight()
+
+#Create New Keyspace
+POST /createKeyspace    controllers.Application.createKeyspace()
+OPTIONS   /createKeyspace    controllers.Application.checkPreFlight()
+
+#Connect to Cassandra
+POST /connectToCassandra    controllers.Application.connectToCassandra()
+OPTIONS    /connectToCassandra    controllers.Application.checkPreFlight()
+
+#Read Cassandra Database
+GET /keyspace/:keyspace_name/table/:table_name/row controllers.Application.getRows(keyspace_name: String, table_name: String)
+
+#Insert a row
+POST /keyspace/:keyspace_name/table/:table_name/row	controllers.Application.addRow(keyspace_name: String, table_name: String)
+
+#Delete a row
+DELETE /keyspace/:keyspace_name/table/:table_name/row	controllers.Application.deleteRow(keyspace_name: String, table_name: String)
+
+#update a row
+PUT  /keyspace/:keyspace_name/table/:table_name/row	controllers.Application.updateRow(keyspace_name: String, table_name: String)
+
+#Create a table
+POST  /keyspace/:keyspace_name/table/	controllers.Application.createTable(keyspace_name: String)
+
+#Get table metadata
+GET  /keyspace/:keyspace_name/table/:table_name	controllers.Application.describeTable(keyspace_name: String, table_name: String)
+
+#Drop a table
+DELETE  /keyspace/:keyspace_name/table/:table_name	controllers.Application.deleteTable(keyspace_name: String, table_name: String)
+
+#Create a column
+POST  /keyspace/:keyspace_name/table/:table_name/column	controllers.Application.addColumn(keyspace_name: String, table_name: String)
+
+#Modify a column 
+PUT  /keyspace/:keyspace_name/table/:table_name/column/:column_name	controllers.Application.AlterColumn(keyspace_name: String, table_name: String, column_name: String)
+
+#Delete a column
+DELETE  /keyspace/:keyspace_name/table/:table_name/column/:column_name	controllers.Application.deleteColumn(keyspace_name: String, table_name: String, column_name: String)
+
+
