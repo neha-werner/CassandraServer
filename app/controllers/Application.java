@@ -27,7 +27,7 @@ public class Application extends Controller {
 	}
 
 
-//TODO:comment 
+//TODO:comment on why is this about?
     public static Result checkPreFlight() {
     	  response().setHeader("Access-Control-Allow-Origin", "*");
     	  response().setHeader("Access-Control-Allow-Methods", "POST");
@@ -35,32 +35,7 @@ public class Application extends Controller {
     	  return ok();
     	}
 
-    @BodyParser.Of(BodyParser.Json.class)
-    public static Promise<Result> getDataFromCassandra() {
-
-    	JsonNode requestData = request().body().asJson();
-    	
-    	Promise<JsonNode> response;
-    	
-       
-    	final CassandraRead cassandraread = new CassandraRead(requestData.findPath("query").asText());
-        
-        response = Promise.promise(new Function0<JsonNode>() {
-          public JsonNode apply() {
-            return cassandraread.getDataFromCassandra();
-          }
-        });
-
-        Promise<Result> result = response.map(new Function<JsonNode, Result>() {
-          public Result apply(JsonNode json) {
-        	  response().setHeader("Access-Control-Allow-Origin", "*");
-            return ok(json);
-          }
-        });
-        return result;
-
-      }
-@BodyParser.Of(BodyParser.Json.class)
+	@BodyParser.Of(BodyParser.Json.class)
 public static Promise<Result> connectToCassandra() {
 
     	JsonNode requestData = request().body().asJson();
@@ -85,7 +60,35 @@ public static Promise<Result> connectToCassandra() {
         return result;
 
       }
-    
+
+
+    @BodyParser.Of(BodyParser.Json.class)
+    public static Promise<Result> getDataFromCassandra() {
+
+    	JsonNode requestData = request().body().asJson();
+    	
+    	Promise<JsonNode> response;
+    	
+       
+    	final CassandraReader cassandraread = new CassandraReader(requestData.findPath("query").asText());
+        
+        response = Promise.promise(new Function0<JsonNode>() {
+          public JsonNode apply() {
+            return cassandraread.getDataFromCassandra();
+          }
+        });
+
+        Promise<Result> result = response.map(new Function<JsonNode, Result>() {
+          public Result apply(JsonNode json) {
+        	  response().setHeader("Access-Control-Allow-Origin", "*");
+            return ok(json);
+          }
+        });
+        return result;
+
+      }
+
+
 @BodyParser.Of(BodyParser.Json.class)
 public static Promise<Result> createKeyspace() {
 
@@ -119,23 +122,24 @@ public static Promise<Result> deleteKeyspace() {
     	Promise<JsonNode> response;
     	
        
-    	final CassandraKeyspace keyspaces = new CassandraKeyspace(requestData.findPath("query").asText());
+    	final CassandraKeyspace keyspace = new CassandraKeyspace(requestData.findPath("query").asText());
         
         response = Promise.promise(new Function0<JsonNode>() {
           public JsonNode apply() {
-            return keyspaces.getKeyspaces();
+            return keyspace.deleteSchema();
           }
         });
 
         Promise<Result> result = response.map(new Function<JsonNode, Result>() {
           public Result apply(JsonNode json) {
-        	 response().setHeader("Access-Control-Allow-Origin", "*");
             return ok(json);
           }
         });
         return result;
 
       }
+
+
 @BodyParser.Of(BodyParser.Json.class)
 public static Promise<Result> getKeyspaces() {
 
@@ -161,6 +165,7 @@ public static Promise<Result> getKeyspaces() {
         return result;
 
       }
+
 	public static Promise<Result> getRows(String keyspace_name, String table_name) {
 		//JsonNode requestData = request().body().asJson()
 		Promise<JsonNode> response;

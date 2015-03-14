@@ -1,4 +1,4 @@
-package cassandra;
+package cassandraQueryIntf;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -21,13 +21,13 @@ public class CassandraKeyspace {
 	
 	private String query;
 
-	private CassandraConnecter cassandraInstanse=null;
+	private CassandraConnector cassandraInstanse=null;
 	
 	public CassandraKeyspace(String query){
 		
 		this.query = query;
 		
-		cassandraInstanse=CassandraConnecter.getInstance();
+		cassandraInstanse=CassandraConnector.getInstance();
 	}
 	
 	public JsonNode createSchema(){
@@ -63,10 +63,9 @@ public JsonNode deleteSchema(){
 		
 		try{
 			
-			//resultSet = cassandraInstanse.getSession().execute(query);
-			//result.add("Deleted Keyspace");	
 			resultSet = cassandraInstanse.getSession().execute(query);
-			result = resultSetJson(resultSet);
+			result.add("Deleted Keyspace");	
+			
 			
 		}catch(Exception e){
 			
@@ -81,55 +80,6 @@ public JsonNode deleteSchema(){
 		return result;
 				
 	}	
-public ArrayNode resultSetJson(ResultSet resultSet)
-{
-	ArrayNode result = JsonNodeFactory.instance.arrayNode();
-	ColumnDefinitions colDef = resultSet.getColumnDefinitions();
-	
-	
-	Iterator<Definition> definitionIterator = colDef.iterator();
-	
-	ArrayList<String> colNames = new ArrayList<String>();
-	
-	ArrayList<String> colDataType = new ArrayList<String>();
-	
-	while(definitionIterator.hasNext()){
-		
-		Definition definition = definitionIterator.next();
-		
-		colNames.add(definition.getName());
-		
-		colDataType.add(definition.getType().toString());
-		
-		
-	}
-	
-	Iterator<Row> it=resultSet.iterator();
-	
-	while(it.hasNext()){
-		
-		Row row = it.next();
-		
-		ObjectNode resultNodeInner = Json.newObject();
-		
-			for(int i = 0; i<colNames.size(); i++){
-				
-				if(colDataType.get(i).equalsIgnoreCase("varchar")){
-											
-					resultNodeInner.put(colNames.get(i), row.getString(i));
-					
-				}else if(colDataType.get(i).equalsIgnoreCase("int")){
-					
-					resultNodeInner.put(colNames.get(i), row.getInt(i));
-				}
-				
-				
-			}
-					
-	  result.add(resultNodeInner);
-	}
-	return result;
-}
 public JsonNode createColumnFamily(){
 	
 	ResultSet resultSet = null;
@@ -137,7 +87,7 @@ public JsonNode createColumnFamily(){
 	ArrayNode result = JsonNodeFactory.instance.arrayNode();
 	
 	try{
-		
+		;
 		//if(cassandraInstanse.getSession())
 		//{
 		resultSet = cassandraInstanse.getSession().execute(query);
@@ -169,7 +119,52 @@ public JsonNode getKeyspaces(){
 	try{
 
 		resultSet = cassandraInstanse.getSession().execute(query);
-		result = resultSetJson(resultSet);
+		ColumnDefinitions colDef = resultSet.getColumnDefinitions();
+		
+		
+		Iterator<Definition> definitionIterator = colDef.iterator();
+		
+		ArrayList<String> colNames = new ArrayList<String>();
+		
+		ArrayList<String> colDataType = new ArrayList<String>();
+		
+		while(definitionIterator.hasNext()){
+			
+			Definition definition = definitionIterator.next();
+			
+			colNames.add(definition.getName());
+			
+			colDataType.add(definition.getType().toString());
+			
+			
+		}
+		
+		
+		
+		Iterator<Row> it=resultSet.iterator();
+		
+		while(it.hasNext()){
+			
+			Row row = it.next();
+			
+			ObjectNode resultNodeInner = Json.newObject();
+			
+				for(int i = 0; i<colNames.size(); i++){
+					
+					if(colDataType.get(i).equalsIgnoreCase("varchar")){
+												
+						resultNodeInner.put(colNames.get(i), row.getString(i));
+						
+					}else if(colDataType.get(i).equalsIgnoreCase("int")){
+						
+						resultNodeInner.put(colNames.get(i), row.getInt(i));
+					}
+					
+					
+				}
+						
+		  result.add(resultNodeInner);
+		}
 
 		
 	}catch(Exception e){
@@ -177,7 +172,7 @@ public JsonNode getKeyspaces(){
 		StringWriter writer = new StringWriter();
 		e.printStackTrace(new PrintWriter(writer));
 
-		play.Logger.debug("[Exception Throws In CassandraKeyspace getKeyspaces]: "
+		play.Logger.debug("[Exception Throws In CassandraKeyspace createColumnFamily]: "
 				+ writer.toString());
 		
 	}
@@ -185,30 +180,5 @@ public JsonNode getKeyspaces(){
 	return result;
 			
 }	
-public JsonNode getTableSchema(){
-	
-	ResultSet resultSet = null;
-	
-	ArrayNode result = JsonNodeFactory.instance.arrayNode();
-
-	try{
-
-		resultSet = cassandraInstanse.getSession().execute(query);
-		result = resultSetJson(resultSet);
-
-		
-	}catch(Exception e){
-		
-		StringWriter writer = new StringWriter();
-		e.printStackTrace(new PrintWriter(writer));
-
-		play.Logger.debug("[Exception Throws In CassandraKeyspace getTableSchema]: "
-				+ writer.toString());
-		
-	}
-		
-	return result;
-			
-}
 }
 
