@@ -3,6 +3,8 @@ package cassandraQueryIntf;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import play.libs.Json;
+
 import com.datastax.driver.core.ResultSet;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -46,7 +48,8 @@ public class CassandraConnect {
 
 			play.Logger.debug("[Exception Throws In connectCassandra]: "
 					+ writer.toString());
-			
+			result.add("Failure");
+			result.add(Json.newObject().put("reason", e.toString()));
 		}
 			
 		return result;

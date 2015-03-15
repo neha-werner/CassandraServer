@@ -51,6 +51,9 @@ public class CassandraKeyspace {
 			play.Logger.debug("[Exception Throws In CassandraKeyspace createSchema]: "
 					+ writer.toString());
 			
+			result.add("Failure");
+			result.add(Json.newObject().put("reason", e.toString()));
+			
 		}
 			
 		return result;
@@ -76,6 +79,8 @@ public JsonNode deleteSchema(){
 
 			play.Logger.debug("[Exception Throws In CassandraKeyspace DeleteSchema]: "
 					+ writer.toString());
+			result.add("Failure");
+			result.add(Json.newObject().put("reason", e.toString()));
 			
 		}
 			

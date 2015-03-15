@@ -36,17 +36,22 @@ public class CassandraReader {
 			//cassandraConnector.connect("127.0.0.1", 9042);
 
 			resultSet = cassandraConnector.getSession().execute(query);
-			result = resultSetJson(resultSet);
+			if(resultSet.iterator().hasNext()){
+				result = resultSetJson(resultSet);
+				
+			}else{
+				result.add("success");
+			}
 			
 
 		} catch (Exception e) {
 
 			play.Logger.debug("[Exception Throws In getDataFromCassandra]: "
 					+ e.toString());
+			result.add("Failure");
+			result.add(Json.newObject().put("reason", e.toString()));
 
-		} finally {
-			cassandraConnector.close();
-		}
+		} 
 
 		return result;
 
@@ -57,26 +62,22 @@ public class CassandraReader {
 		ResultSet resultSet = null;
 		
 		ArrayNode result = JsonNodeFactory.instance.arrayNode();
-		result.add(query);
+	
 		try {
 			
-			cassandraConnector.connect("127.0.0.1", 9042);
+			//cassandraConnector.connect("127.0.0.1", 9042);
 
 			resultSet = cassandraConnector.getSession().execute(query);
 			
-
-			
-
-			
-			result.add(resultSet.toString());
+			result.add("Success");
 			
 		} catch (Exception e) {
 
-			play.Logger.debug("[Exception Throws In getDataFromCassandra]: "
+			play.Logger.debug("[Exception Throws In executeQuery]: "
 					+ e.toString());
+			result.add("Failure");
+			result.add(Json.newObject().put("reason", e.toString()));
 
-		} finally {
-			cassandraConnector.close();
 		}
 
 		return result;
