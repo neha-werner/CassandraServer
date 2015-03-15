@@ -36,48 +36,8 @@ public class CassandraReader {
 			//cassandraConnector.connect("127.0.0.1", 9042);
 
 			resultSet = cassandraConnector.getSession().execute(query);
-
-			ColumnDefinitions colDef = resultSet.getColumnDefinitions();
-
-			Iterator<Definition> definitionIterator = colDef.iterator();
-
-			ArrayList<String> colNames = new ArrayList<String>();
-
-			ArrayList<String> colDataType = new ArrayList<String>();
-
-			while (definitionIterator.hasNext()) {
-
-				Definition definition = definitionIterator.next();
-
-				colNames.add(definition.getName());
-
-				colDataType.add(definition.getType().toString());
-
-			}
-
-			Iterator<Row> it = resultSet.iterator();
-
-			while (it.hasNext()) {
-
-				Row row = it.next();
-
-				ObjectNode resultNodeInner = Json.newObject();
-
-				for (int i = 0; i < colNames.size(); i++) {
-
-					if (colDataType.get(i).equalsIgnoreCase("varchar")) {
-
-						resultNodeInner.put(colNames.get(i), row.getString(i));
-
-					} else if (colDataType.get(i).equalsIgnoreCase("int")) {
-
-						resultNodeInner.put(colNames.get(i), row.getInt(i));
-					}
-
-				}
-
-				result.add(resultNodeInner);
-			}
+			result = resultSetJson(resultSet);
+			
 
 		} catch (Exception e) {
 
@@ -121,5 +81,55 @@ public class CassandraReader {
 
 		return result;
 
+	}
+
+	public ArrayNode resultSetJson(ResultSet resultSet)
+	{
+		ArrayNode result = JsonNodeFactory.instance.arrayNode();
+		ColumnDefinitions colDef = resultSet.getColumnDefinitions();
+		
+		
+		Iterator<Definition> definitionIterator = colDef.iterator();
+		
+		ArrayList<String> colNames = new ArrayList<String>();
+		
+		ArrayList<String> colDataType = new ArrayList<String>();
+		
+		while(definitionIterator.hasNext()){
+			
+			Definition definition = definitionIterator.next();
+			
+			colNames.add(definition.getName());
+			
+			colDataType.add(definition.getType().toString());
+			
+			
+		}
+		
+		Iterator<Row> it=resultSet.iterator();
+		
+		while(it.hasNext()){
+			
+			Row row = it.next();
+			
+			ObjectNode resultNodeInner = Json.newObject();
+			
+				for(int i = 0; i<colNames.size(); i++){
+					
+					if(colDataType.get(i).equalsIgnoreCase("varchar")){
+												
+						resultNodeInner.put(colNames.get(i), row.getString(i));
+						
+					}else if(colDataType.get(i).equalsIgnoreCase("int")){
+						
+						resultNodeInner.put(colNames.get(i), row.getInt(i));
+					}
+					
+					
+				}
+						
+		  result.add(resultNodeInner);
+		}
+		return result;
 	}
 }
