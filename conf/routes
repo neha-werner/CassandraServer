@@ -9,24 +9,29 @@ GET     /                           controllers.Application.index()
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 
+OPTIONS    /*all   controllers.Application.checkPreFlight(all :String)
+
 #Read From Cassandra
 POST /getDataFromCassandra    controllers.Application.getDataFromCassandra()
 
+#Get table schema
+POST /getTableSchema    controllers.Application.getTableSchema()
+
 #Delete Keyspace
 POST /deleteKeyspace    controllers.Application.deleteKeyspace()
-OPTIONS   /deleteKeyspace    controllers.Application.checkPreFlight()
 
 #Describe Keyspaces
 POST /getKeyspaces	controllers.Application.getKeyspaces()
-OPTIONS   /getKeyspaces    controllers.Application.checkPreFlight()
 
 #Create New Keyspace
 POST /createKeyspace    controllers.Application.createKeyspace()
-OPTIONS   /createKeyspace    controllers.Application.checkPreFlight()
 
 #Connect to Cassandra
 POST /connectToCassandra    controllers.Application.connectToCassandra()
-OPTIONS    /connectToCassandra    controllers.Application.checkPreFlight()
+
+#Get table metadata
+GET  /keyspace/:keyspace_name/table/:table_name	controllers.Application.describeTable(keyspace_name: String, table_name: String)
+
 
 #Read Cassandra Database
 GET /keyspace/:keyspace_name/table/:table_name/row controllers.Application.getRows(keyspace_name: String, table_name: String)
@@ -43,8 +48,6 @@ PUT  /keyspace/:keyspace_name/table/:table_name/row	controllers.Application.upda
 #Create a table
 POST  /keyspace/:keyspace_name/table/	controllers.Application.createTable(keyspace_name: String)
 
-#Get table metadata
-GET  /keyspace/:keyspace_name/table/:table_name	controllers.Application.describeTable(keyspace_name: String, table_name: String)
 
 #Drop a table
 DELETE  /keyspace/:keyspace_name/table/:table_name	controllers.Application.deleteTable(keyspace_name: String, table_name: String)

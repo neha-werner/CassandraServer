@@ -28,9 +28,9 @@ public class Application extends Controller {
 
 
 //TODO:comment on why is this about?
-    public static Result checkPreFlight() {
+    public static Result checkPreFlight(String all) {
     	  response().setHeader("Access-Control-Allow-Origin", "*");
-    	  response().setHeader("Access-Control-Allow-Methods", "POST");
+    	  response().setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE"); 
     	  response().setHeader("Access-Control-Allow-Headers", "accept, origin, Content-type, x-json, x-prototype-version, x-requested-with");
     	  return ok();
     	}
@@ -102,6 +102,31 @@ public static Promise<Result> createKeyspace() {
         response = Promise.promise(new Function0<JsonNode>() {
           public JsonNode apply() {
             return keyspace.createSchema();
+          }
+        });
+
+        Promise<Result> result = response.map(new Function<JsonNode, Result>() {
+          public Result apply(JsonNode json) {
+        	  response().setHeader("Access-Control-Allow-Origin", "*");
+            return ok(json);
+          }
+        });
+        return result;
+
+      }
+@BodyParser.Of(BodyParser.Json.class)
+public static Promise<Result> getTableSchema() {
+
+    	JsonNode requestData = request().body().asJson();
+    	
+    	Promise<JsonNode> response;
+    	
+       
+    	final CassandraKeyspace keyspaceForSchema = new CassandraKeyspace(requestData.findPath("query").asText());
+        
+        response = Promise.promise(new Function0<JsonNode>() {
+          public JsonNode apply() {
+            return keyspaceForSchema.getTableSchema();
           }
         });
 
@@ -479,6 +504,7 @@ public static Promise<Result> getKeyspaces() {
 
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
+				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
 		});
