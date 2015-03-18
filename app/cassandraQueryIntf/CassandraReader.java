@@ -39,8 +39,6 @@ public class CassandraReader {
 			if(resultSet.iterator().hasNext()){
 				result = resultSetJson(resultSet);
 				
-			}else{
-				result.add("success");
 			}
 			
 

@@ -157,6 +157,7 @@ public static Promise<Result> deleteKeyspace() {
 
         Promise<Result> result = response.map(new Function<JsonNode, Result>() {
           public Result apply(JsonNode json) {
+        	  response().setHeader("Access-Control-Allow-Origin", "*");
             return ok(json);
           }
         });
@@ -206,6 +207,7 @@ public static Promise<Result> getKeyspaces() {
 
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
+				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
 		});
@@ -271,6 +273,7 @@ public static Promise<Result> getKeyspaces() {
 
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
+				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
 		});
@@ -328,6 +331,7 @@ public static Promise<Result> getKeyspaces() {
 
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
+				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
 		});
@@ -390,6 +394,7 @@ public static Promise<Result> getKeyspaces() {
 
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
+				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
 		});
@@ -468,6 +473,7 @@ public static Promise<Result> getKeyspaces() {
 
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
+				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
 		});
@@ -539,6 +545,7 @@ public static Promise<Result> getKeyspaces() {
 
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
+				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
 		});
@@ -585,6 +592,7 @@ public static Promise<Result> getKeyspaces() {
 
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
+				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
 		});
@@ -625,6 +633,7 @@ public static Promise<Result> getKeyspaces() {
 
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
+				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
 		});
@@ -653,6 +662,7 @@ public static Promise<Result> getKeyspaces() {
 
 		response = Promise.promise(new Function0<JsonNode>() {
 			public JsonNode apply() {
+				response().setHeader("Access-Control-Allow-Origin", "*");
 				return cassandraread.executeQuery();
 			}
 		});
