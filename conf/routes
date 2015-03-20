@@ -14,6 +14,9 @@ OPTIONS    /*all   controllers.Application.checkPreFlight(all :String)
 #Connect to Cassandra
 POST /connection    controllers.Application.connectToCassandra()
 
+#disconnect 
+DELETE /connection    controllers.Application.closeCassandra()
+
 #Read From Cassandra. For executing queries
 POST /getDataFromCassandra    controllers.Application.getDataFromCassandra()
 
