@@ -20,7 +20,7 @@ import cassandraQueryIntf.CassandraKeyspace;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class Application extends Controller {
-
+	
 	public static Result index() {
 		 return ok(views.html.index.render("Your new application is ready."));
 		//return ok("Got request " + request() + "!");
@@ -60,7 +60,30 @@ public class Application extends Controller {
         return result;
 
       }
+	
+	
+	public static Promise<Result> closeCassandra() {
 
+    	Promise<JsonNode> response;
+    	
+       
+    	final CassandraConnect connectcas = new CassandraConnect();
+        
+        response = Promise.promise(new Function0<JsonNode>() {
+          public JsonNode apply() {
+            return connectcas.closeCassandra();
+          }
+        });
+
+        Promise<Result> result = response.map(new Function<JsonNode, Result>() {
+          public Result apply(JsonNode json) {
+        	  response().setHeader("Access-Control-Allow-Origin", "*");
+            return ok(json);
+          }
+        });
+        return result;
+
+      }
 
     @BodyParser.Of(BodyParser.Json.class)
     public static Promise<Result> getDataFromCassandra() {
@@ -134,10 +157,10 @@ public static Promise<Result> createKeyspace() {
 
       }
 
-@BodyParser.Of(BodyParser.Json.class)
+
 public static Promise<Result> getTableSchema(String keyspace_name) {
 
-    	JsonNode requestData = request().body().asJson();
+    	
     	
     	Promise<JsonNode> response;
     	
@@ -161,10 +184,11 @@ public static Promise<Result> getTableSchema(String keyspace_name) {
         return result;
 
       }
-@BodyParser.Of(BodyParser.Json.class)
+
+
 public static Promise<Result> deleteKeyspace(String keyspace_name) {
 
-    	JsonNode requestData = request().body().asJson();
+
     	
     	Promise<JsonNode> response;
     	
@@ -189,10 +213,10 @@ public static Promise<Result> deleteKeyspace(String keyspace_name) {
       }
 
 
-@BodyParser.Of(BodyParser.Json.class)
+
 public static Promise<Result> getKeyspaces() {
 
-    	JsonNode requestData = request().body().asJson();
+    	
     	
     	Promise<JsonNode> response;
     	

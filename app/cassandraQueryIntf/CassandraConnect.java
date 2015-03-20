@@ -26,6 +26,9 @@ public class CassandraConnect {
 		
 		cassandraInstanse=CassandraConnector.getInstance();
 	}
+	public CassandraConnect(){
+		cassandraInstanse=CassandraConnector.getInstance();
+	}
 	
 	public JsonNode connectCassandra(){
 		
@@ -39,6 +42,35 @@ public class CassandraConnect {
 
 		 
 			result.add("connected Successfully");	
+			
+			
+		}catch(Exception e){
+			
+			StringWriter writer = new StringWriter();
+			e.printStackTrace(new PrintWriter(writer));
+
+			play.Logger.debug("[Exception Throws In connectCassandra]: "
+					+ writer.toString());
+			result.add("Failure");
+			result.add(Json.newObject().put("reason", e.toString()));
+		}
+			
+		return result;
+				
+	}	
+	
+	public JsonNode closeCassandra(){
+		
+		//ResultSet resultSet = null;
+		
+		ArrayNode result = JsonNodeFactory.instance.arrayNode();
+		
+		try{
+			
+			cassandraInstanse.close();
+
+		 
+			result.add("disconnected Successfully");	
 			
 			
 		}catch(Exception e){
