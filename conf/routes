@@ -11,23 +11,37 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 OPTIONS    /*all   controllers.Application.checkPreFlight(all :String)
 
-#Read From Cassandra
+#Connect to Cassandra
+POST /connection    controllers.Application.connectToCassandra()
+
+#Read From Cassandra. For executing queries
 POST /getDataFromCassandra    controllers.Application.getDataFromCassandra()
 
-#Get table schema
-POST /getTableSchema    controllers.Application.getTableSchema()
 
-#Delete Keyspace
-POST /deleteKeyspace    controllers.Application.deleteKeyspace()
-
-#Describe Keyspaces
-POST /getKeyspaces	controllers.Application.getKeyspaces()
+#Keyspace operations
 
 #Create New Keyspace
-POST /createKeyspace    controllers.Application.createKeyspace()
+POST /keyspace    controllers.Application.createKeyspace()
 
-#Connect to Cassandra
-POST /connectToCassandra    controllers.Application.connectToCassandra()
+#Describe Keyspaces
+GET /keyspace	controllers.Application.getKeyspaces()
+
+
+#Delete Keyspace
+DELETE /keyspace/:keyspace_name    controllers.Application.deleteKeyspace(keyspace_name: String)
+
+
+#Get table schema
+GET /keyspace/:keyspace_name/table    controllers.Application.getTableSchema(keyspace_name: String)
+
+#Create a table
+POST  /keyspace/:keyspace_name/table	controllers.Application.createTable(keyspace_name: String)
+
+
+#Drop a table
+DELETE  /keyspace/:keyspace_name/table/:table_name	controllers.Application.deleteTable(keyspace_name: String, table_name: String)
+
+
 
 #Get table metadata
 GET  /keyspace/:keyspace_name/table/:table_name	controllers.Application.describeTable(keyspace_name: String, table_name: String)
@@ -45,12 +59,7 @@ DELETE /keyspace/:keyspace_name/table/:table_name/row	controllers.Application.de
 #update a row
 PUT  /keyspace/:keyspace_name/table/:table_name/row	controllers.Application.updateRow(keyspace_name: String, table_name: String)
 
-#Create a table
-POST  /keyspace/:keyspace_name/table/	controllers.Application.createTable(keyspace_name: String)
 
-
-#Drop a table
-DELETE  /keyspace/:keyspace_name/table/:table_name	controllers.Application.deleteTable(keyspace_name: String, table_name: String)
 
 #Create a column
 POST  /keyspace/:keyspace_name/table/:table_name/column	controllers.Application.addColumn(keyspace_name: String, table_name: String)

@@ -36,7 +36,7 @@ public class Application extends Controller {
     	}
 
 	@BodyParser.Of(BodyParser.Json.class)
-public static Promise<Result> connectToCassandra() {
+	public static Promise<Result> connectToCassandra() {
 
     	JsonNode requestData = request().body().asJson();
     	
@@ -90,14 +90,33 @@ public static Promise<Result> connectToCassandra() {
 
 
 @BodyParser.Of(BodyParser.Json.class)
+
+/*
+ * create  a keyspace
+ *  The POST Json will be of the format: 
+ * {
+ * {"keyspacename":"name", 
+ * 	"kclass":"class"
+ * 	"replication_factor":<integer>
+ * }
+ * }
+ */
 public static Promise<Result> createKeyspace() {
 
     	JsonNode requestData = request().body().asJson();
     	
     	Promise<JsonNode> response;
     	
-       
-    	final CassandraKeyspace keyspace = new CassandraKeyspace(requestData.findPath("query").asText());
+    	StringBuilder query = new StringBuilder("CREATE KEYSPACE " + requestData.findPath("keyspacename").asText()+
+    			 " WITH REPLICATION  = { 'class' : '"+ requestData.findPath("kclass").asText() 
+    			 +"'");//'class' : 'SimpleStrategy', 'replication_factor' : 3 }"};);
+    	
+    	if(requestData.findPath("kclass").asText().equals("SimpleStrategy")){
+    		query.append(", 'replication_factor' :" + requestData.findPath("replication_factor") );
+    	}
+        
+    	query.append("}");
+    	final CassandraKeyspace keyspace = new CassandraKeyspace(query.toString());
         
         response = Promise.promise(new Function0<JsonNode>() {
           public JsonNode apply() {
@@ -114,15 +133,18 @@ public static Promise<Result> createKeyspace() {
         return result;
 
       }
+
 @BodyParser.Of(BodyParser.Json.class)
-public static Promise<Result> getTableSchema() {
+public static Promise<Result> getTableSchema(String keyspace_name) {
 
     	JsonNode requestData = request().body().asJson();
     	
     	Promise<JsonNode> response;
     	
        
-    	final CassandraKeyspace keyspaceForSchema = new CassandraKeyspace(requestData.findPath("query").asText());
+    	final CassandraKeyspace keyspaceForSchema = new CassandraKeyspace(
+    			"SELECT columnfamily_name FROM system.schema_columnfamilies "
+    			+ "WHERE keyspace_name = '"+keyspace_name+"'");
         
         response = Promise.promise(new Function0<JsonNode>() {
           public JsonNode apply() {
@@ -140,14 +162,15 @@ public static Promise<Result> getTableSchema() {
 
       }
 @BodyParser.Of(BodyParser.Json.class)
-public static Promise<Result> deleteKeyspace() {
+public static Promise<Result> deleteKeyspace(String keyspace_name) {
 
     	JsonNode requestData = request().body().asJson();
     	
     	Promise<JsonNode> response;
     	
        
-    	final CassandraKeyspace keyspace = new CassandraKeyspace(requestData.findPath("query").asText());
+    	final CassandraKeyspace keyspace = new CassandraKeyspace(
+    			"DROP KEYSPACE "+ keyspace_name);
         
         response = Promise.promise(new Function0<JsonNode>() {
           public JsonNode apply() {
@@ -174,7 +197,8 @@ public static Promise<Result> getKeyspaces() {
     	Promise<JsonNode> response;
     	
        
-    	final CassandraKeyspace keyspaces = new CassandraKeyspace(requestData.findPath("query").asText());
+    	final CassandraKeyspace keyspaces = new CassandraKeyspace(
+    			"SELECT keyspace_name FROM system.schema_keyspaces");
         
         response = Promise.promise(new Function0<JsonNode>() {
           public JsonNode apply() {
@@ -325,6 +349,7 @@ public static Promise<Result> getKeyspaces() {
 
 		response = Promise.promise(new Function0<JsonNode>() {
 			public JsonNode apply() {
+				
 				return cassandraread.executeQuery();
 			}
 		});

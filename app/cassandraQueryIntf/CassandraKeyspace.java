@@ -31,7 +31,7 @@ public class CassandraKeyspace {
 	}
 	
 	
-	public JsonNode createSchema(){
+public JsonNode createSchema(){
 		
 		ResultSet resultSet = null;
 		
