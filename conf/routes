@@ -18,7 +18,7 @@ POST /connection    controllers.Application.connectToCassandra()
 DELETE /connection    controllers.Application.closeCassandra()
 
 #Read From Cassandra. For executing queries
-POST /getDataFromCassandra    controllers.Application.getDataFromCassandra()
+POST /cqlQuery    controllers.Application.getDataFromCassandra()
 
 
 #Keyspace operations
