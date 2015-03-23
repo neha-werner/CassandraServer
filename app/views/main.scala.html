@@ -2,13 +2,6 @@
 <!doctype html>
 <html ng-app="myApp">
 <head>
-<!--<script
-	src="js/angular.min.js"></script>
-<script src="js/main.js"></script>
-<script type="text/javascript"
-	src="js/jquery.min.js"></script>
-<script type="text/javascript"
-	src="js/jquery-ui.min.js"></script>-->
 <script src="@routes.Assets.at("javascripts/angular.min.js")" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/jquery.min.js")" type="text/javascript"></script>
@@ -160,7 +153,7 @@
 										<td ng-repeat="(key, val) in metadata">{{val}}</td>
 										<td><a href="javascript:void(0);"
 											ng-click="deleteColumn(metadata.column_name);"><img
-												src="images/trash.png" title="Delete column" /></a></td>
+												src="@routes.Assets.at("images/trash.png")" title="Delete column" /></a></td>
 										<td><select ng-model="editCol.datatype"
 											ng-options="data.name as data.name for data in dataType"></select><a
 											href="javascript:void(0);"
@@ -230,7 +223,8 @@
 						<tr ng-repeat="answerRow in answerRows">
 							<td ng-repeat="(key, val) in answerRow">{{val}}</td>
 					</table>
-					<div  ng-show="!answerRows.length">{{answerRows}}</div>
+					<div ng-show="!answerRows.length && cqlMsg">{{cqlMsg}}</div>
+					
 				</form>
 
 			</div>
@@ -252,16 +246,4 @@
 		$(".ui-tabs").tabs();
 	});
 </script>
-<!-- 
-<html>
-    <head>
-        <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
-        <script src="@routes.Assets.at("javascripts/hello.js")" type="text/javascript"></script>
-    </head>
-    <body>
-        @content
-    </body>
-</html>
--->
+

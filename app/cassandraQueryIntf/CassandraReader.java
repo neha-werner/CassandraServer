@@ -31,7 +31,7 @@ public class CassandraReader {
 
 		ArrayNode result = JsonNodeFactory.instance.arrayNode();
 
-		try {
+	//	try {
 
 			//cassandraConnector.connect("127.0.0.1", 9042);
 
@@ -42,14 +42,14 @@ public class CassandraReader {
 			}
 			
 
-		} catch (Exception e) {
+		/*} catch (Exception e) {
 
 			play.Logger.debug("[Exception Throws In getDataFromCassandra]: "
 					+ e.toString());
 			result.add("Failure");
 			result.add(Json.newObject().put("reason", e.toString()));
 
-		} 
+		} */
 		
 		return result;
 
@@ -61,7 +61,7 @@ public class CassandraReader {
 		
 		ArrayNode result = JsonNodeFactory.instance.arrayNode();
 	
-		try {
+		//try {
 			
 			//cassandraConnector.connect("127.0.0.1", 9042);
 
@@ -69,14 +69,15 @@ public class CassandraReader {
 			
 			result.add("Success");
 			
-		} catch (Exception e) {
+		/*
+		 * } catch (Exception e) {
 
 			play.Logger.debug("[Exception Throws In executeQuery]: "
 					+ e.toString());
 			result.add("Failure");
 			result.add(Json.newObject().put("reason", e.toString()));
 
-		}
+		}*/
 
 		return result;
 

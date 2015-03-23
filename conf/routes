@@ -62,8 +62,6 @@ DELETE /keyspace/:keyspace_name/table/:table_name/row	controllers.Application.de
 #update a row
 PUT  /keyspace/:keyspace_name/table/:table_name/row	controllers.Application.updateRow(keyspace_name: String, table_name: String)
 
-
-
 #Create a column
 POST  /keyspace/:keyspace_name/table/:table_name/column	controllers.Application.addColumn(keyspace_name: String, table_name: String)
 

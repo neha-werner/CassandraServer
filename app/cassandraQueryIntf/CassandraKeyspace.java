@@ -37,13 +37,13 @@ public JsonNode createSchema(){
 		
 		ArrayNode result = JsonNodeFactory.instance.arrayNode();
 		
-		try{
+	//	try{
 			
 			resultSet = cassandraInstanse.getSession().execute(query);
 			result.add("Added New Keyspace");	
 			
 			
-		}catch(Exception e){
+		/*}catch(Exception e){
 			
 			StringWriter writer = new StringWriter();
 			e.printStackTrace(new PrintWriter(writer));
@@ -54,7 +54,7 @@ public JsonNode createSchema(){
 			result.add("Failure");
 			result.add(Json.newObject().put("reason", e.toString()));
 			
-		}
+		}*/
 			
 		return result;
 				
@@ -65,14 +65,14 @@ public JsonNode deleteSchema(){
 		
 		ArrayNode result = JsonNodeFactory.instance.arrayNode();
 		
-		try{
+		//try{
 			
 			//resultSet = cassandraInstanse.getSession().execute(query);
 			//result.add("Deleted Keyspace");	
 			resultSet = cassandraInstanse.getSession().execute(query);
 			result = resultSetJson(resultSet);
 			
-		}catch(Exception e){
+		/*}catch(Exception e){
 			
 			StringWriter writer = new StringWriter();
 			e.printStackTrace(new PrintWriter(writer));
@@ -82,7 +82,7 @@ public JsonNode deleteSchema(){
 			result.add("Failure");
 			result.add(Json.newObject().put("reason", e.toString()));
 			
-		}
+		}*/
 			
 		return result;
 				
@@ -142,7 +142,7 @@ public JsonNode createColumnFamily(){
 	
 	ArrayNode result = JsonNodeFactory.instance.arrayNode();
 	
-	try{
+	//try{
 		
 		//if(cassandraInstanse.getSession())
 		//{
@@ -153,7 +153,7 @@ public JsonNode createColumnFamily(){
 		//	result.add("Not Connected to any cluster");
 		
 		
-	}catch(Exception e){
+	/*}catch(Exception e){
 		
 		StringWriter writer = new StringWriter();
 		e.printStackTrace(new PrintWriter(writer));
@@ -161,7 +161,7 @@ public JsonNode createColumnFamily(){
 		play.Logger.debug("[Exception Throws In CassandraKeyspace createColumnFamily]: "
 				+ writer.toString());
 		
-	}
+	}*/
 		
 	return result;
 			
@@ -172,13 +172,13 @@ public JsonNode getKeyspaces(){
 	
 	ArrayNode result = JsonNodeFactory.instance.arrayNode();
 
-	try{
+	//try{
 
 		resultSet = cassandraInstanse.getSession().execute(query);
 		result = resultSetJson(resultSet);
 
 		
-	}catch(Exception e){
+	/*}catch(Exception e){
 		
 		StringWriter writer = new StringWriter();
 		e.printStackTrace(new PrintWriter(writer));
@@ -186,7 +186,7 @@ public JsonNode getKeyspaces(){
 		play.Logger.debug("[Exception Throws In CassandraKeyspace getKeyspaces]: "
 				+ writer.toString());
 		
-	}
+	}*/
 		
 	return result;
 			
@@ -197,13 +197,13 @@ public JsonNode getTableSchema(){
 	
 	ArrayNode result = JsonNodeFactory.instance.arrayNode();
 
-	try{
+	//try{
 
 		resultSet = cassandraInstanse.getSession().execute(query);
 		result = resultSetJson(resultSet);
 
 		
-	}catch(Exception e){
+	/*}catch(Exception e){
 		
 		StringWriter writer = new StringWriter();
 		e.printStackTrace(new PrintWriter(writer));
@@ -211,7 +211,7 @@ public JsonNode getTableSchema(){
 		play.Logger.debug("[Exception Throws In CassandraKeyspace getTableSchema]: "
 				+ writer.toString());
 		
-	}
+	}*/
 		
 	return result;
 			

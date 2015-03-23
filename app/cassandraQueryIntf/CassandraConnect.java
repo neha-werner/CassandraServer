@@ -36,7 +36,7 @@ public class CassandraConnect {
 		
 		ArrayNode result = JsonNodeFactory.instance.arrayNode();
 		
-		try{
+		//try{
 			
 			cassandraInstanse.connect(IP,port);
 
@@ -44,7 +44,7 @@ public class CassandraConnect {
 			result.add("connected Successfully");	
 			
 			
-		}catch(Exception e){
+		/*}catch(Exception e){
 			
 			StringWriter writer = new StringWriter();
 			e.printStackTrace(new PrintWriter(writer));
@@ -53,7 +53,7 @@ public class CassandraConnect {
 					+ writer.toString());
 			result.add("Failure");
 			result.add(Json.newObject().put("reason", e.toString()));
-		}
+		}*/
 			
 		return result;
 				
@@ -65,7 +65,7 @@ public class CassandraConnect {
 		
 		ArrayNode result = JsonNodeFactory.instance.arrayNode();
 		
-		try{
+	//	try{
 			
 			cassandraInstanse.close();
 
@@ -73,7 +73,7 @@ public class CassandraConnect {
 			result.add("disconnected Successfully");	
 			
 			
-		}catch(Exception e){
+		/*}catch(Exception e){
 			
 			StringWriter writer = new StringWriter();
 			e.printStackTrace(new PrintWriter(writer));
@@ -82,7 +82,7 @@ public class CassandraConnect {
 					+ writer.toString());
 			result.add("Failure");
 			result.add(Json.newObject().put("reason", e.toString()));
-		}
+		}*/
 			
 		return result;
 				

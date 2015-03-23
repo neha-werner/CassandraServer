@@ -13,6 +13,7 @@ app.controller('MyController',['$scope','$http', function($scope,$http) {
   $scope.rowValue = [];
   $scope.editableRow = -1;
   $scope.editablecolumn = -1;
+  $scope.cqlMsg = "";
   
   $scope.keyspacedata ={
 	name:"",
@@ -110,6 +111,21 @@ var dataToPost = {  hostname:$scope.IP.first+"."+$scope.IP.two+"."+$scope.IP.thr
 		$scope.getAllKeyspaces();
 		$scope.connect="Disconnect";
 		$scope.showCreateKeyspace=false;
+            }).error(function(serverResponse, status) {
+            	$scope.error = serverResponse;
+        		$scope.person.name = serverResponse;
+    			$scope.connect="Connect";
+    			$scope.keyspaces="";
+    			$scope.keyspacedata.name = "";
+    			$scope.keyspacedata.Table ="";
+    			$scope.keyspacedata.metadata = "";
+    			$scope.ShowMetaData = "";
+    			$scope.TableDataShow = "";
+    			$scope.keyspacedata.tabledata = "";
+    			$scope.columnfamilynames="";
+    			$scope.showCreateTable="";
+    			$scope.showCreateKeyspace=false;
+    			$scope.showTable= false;
             });
 }
 else
@@ -129,7 +145,22 @@ else
 			$scope.showCreateTable="";
 			$scope.showCreateKeyspace=false;
 			$scope.showTable= false;
-		});
+		}).error(function(serverResponse, status) {
+        	$scope.error = serverResponse;
+    		$scope.person.name = serverResponse;
+			$scope.connect="Connect";
+			$scope.keyspaces="";
+			$scope.keyspacedata.name = "";
+			$scope.keyspacedata.Table ="";
+			$scope.keyspacedata.metadata = "";
+			$scope.ShowMetaData = "";
+			$scope.TableDataShow = "";
+			$scope.keyspacedata.tabledata = "";
+			$scope.columnfamilynames="";
+			$scope.showCreateTable="";
+			$scope.showCreateKeyspace=false;
+			$scope.showTable= false;
+        });
 }
 }
 
@@ -149,7 +180,14 @@ var dataToPost = {keyspacename:$scope.newKeyspace.scehmaName,
 		$scope.newKeyspace.scehmaName="";
 		$scope.newKeyspace.Replicationfactor="";
 		$scope.getAllKeyspaces();
-            });
+            }).error(function(serverResponse, status) {
+            	$scope.error = serverResponse;
+            	$scope.keyspacedata.Table = "";
+            	$scope.ShowMetaData = "";
+            	$scope.TableDataShow = "";
+            	$scope.keyspacedata.metadata = "";
+            	$scope.keyspacedata.tabledata = "";
+            });;
 }
 
 $scope.testCreateTable=function(keySpaceName){
@@ -177,6 +215,8 @@ $scope.getKeyspaceSchema = function(keySpace) {
                 // Updating the $scope postresponse variable to update theview
                 $scope.columnfamilynames = serverResponse;
 
+            }).error(function(serverResponse, status) {
+            	$scope.error = serverResponse;
             });
 }
 
@@ -186,6 +226,9 @@ $scope.deleteKeyspace = function(DropKeyspace) {
             .success(function(serverResponse, status) {
                 // Updating the $scope postresponse variable to update theview
                 $scope.getAllKeyspaces();
+            }).error(function(serverResponse, status) {
+            	$scope.error = serverResponse;
+        
             });
 }
 
@@ -200,6 +243,13 @@ $scope.tableMetaData = function(tablename) {
                 // Updating the $scope postresponse variable to update theview
             	
                 $scope.keyspacedata.metadata = serverResponse;
+            }).error(function(serverResponse, status) {
+            	$scope.error = serverResponse;
+            	$scope.keyspacedata.Table = "";
+            	$scope.ShowMetaData = "";
+            	$scope.TableDataShow = "";
+            	$scope.keyspacedata.metadata = "";
+            	$scope.keyspacedata.tabledata = "";
             });
 }
 
@@ -221,7 +271,18 @@ $scope.getTableData = function(tablename) {
 		$scope.temp=serverResponse;
                 $scope.keyspacedata.tabledata = serverResponse;
                 
-           });
+           }).error(function(serverResponse, status) {
+        	    // called asynchronously if an error occurs
+        	    // or server returns response with an error status.
+
+        		$scope.keyspacedata.tabledata = "";
+        		$scope.keyspacedata.metadata = "";
+        		      		
+        		$scope.ShowMetaData = "";//hide metadata
+        		
+        		$scope.TableDataShow = "";
+        		$scope.error = serverResponse;
+        	  });
     
     
 }
@@ -454,7 +515,14 @@ $scope.sendQuery = function() {
 	            .success(function(serverResponse, status) {
 	                // Updating the $scope postresponse variable to update theview
 	                $scope.answerRows = serverResponse;
-	            });
+	                $scope.error = "";
+	                $scope.cqlMsg = "Success";
+	            }).error(function(serverResponse, status) {
+	                // called asynchronously if an error occurs
+	                // or server returns response with an error status.
+	            				$scope.answerRows = [];
+	            				$scope.cqlMsg = "Failed:" + serverResponse;
+	              });
 }
 
 $scope.addNewChoice = function() {
