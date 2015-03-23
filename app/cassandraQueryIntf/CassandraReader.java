@@ -50,7 +50,7 @@ public class CassandraReader {
 			result.add(Json.newObject().put("reason", e.toString()));
 
 		} 
-
+		
 		return result;
 
 	}
