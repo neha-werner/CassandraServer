@@ -68,7 +68,7 @@
 								<tr>
 									<td>Keyspaces:</td>
 									<td><a href="javascript:void(0);"
-										ng-click="testCreateSchema();"><img src="images/add.png"
+										ng-click="testCreateSchema();"><img src="@routes.Assets.at("images/add.png")"
 											title="Add Keyspace" /></td>
 								</tr>
 
@@ -77,7 +77,7 @@
 										ng-click="getKeyspaceSchema(keyspace.keyspace_name);">{{keyspace.keyspace_name}}</a>
 									  	</td><td valign="top"><a href="javascript:void(0);"
 										ng-click="deleteKeyspace(keyspace.keyspace_name);"><img
-											src="images/trash.png" title="Delete Keyspace" /></a>
+											src="@routes.Assets.at("images/trash.png")" title="Delete Keyspace" /></a>
 									</td>
 									<td ng-show="keyspacedata.name==keyspace.keyspace_name">
 									    <fieldset>
@@ -93,13 +93,13 @@
 												</td>
 												<td><a href="javascript:void(0);"
 													ng-click="dropTable($index,columnfamily.columnfamily_name);"><img
-														src="images/delete.png" title="Delete" /></a>
+														src="@routes.Assets.at("images/delete.png")" title="Delete" /></a>
 												<td>
 											</tr>
 											
 										</table>
 										 <a href="javascript:void(0);"
-											ng-click="testCreateTable(keyspace.keyspace_name);"><img src="images/add.png"
+											ng-click="testCreateTable(keyspace.keyspace_name);"><img src="@routes.Assets.at("images/add.png")"
 											title="Add Table" /></a><br>
 									
 									
@@ -122,9 +122,9 @@
 												<td><input type="checkbox" ng-model="choice.isPrimary"></td>
 												<td><a href="javascript:void(0);"
 													ng-show="showAddChoice(choice)" ng-click="addNewChoice()"><img
-														src="images/add.png" title="Add new column" /></a></td>
+														src="@routes.Assets.at("images/add.png")" title="Add new column" /></a></td>
 												<td><a href="javascript:void(0);"
-													ng-click="removeChoice()"><img src="images/trash.png"
+													ng-click="removeChoice()"><img src="@routes.Assets.at("images/trash.png")"
 														title="Delete column" /></a><br>
 												</td>
 														
@@ -165,7 +165,7 @@
 											ng-options="data.name as data.name for data in dataType"></select><a
 											href="javascript:void(0);"
 											ng-click="editColumn(metadata.column_name,editCol.datatype);"><img
-												src="images/edit.png" title="edit column" /></a></td>
+												src="@routes.Assets.at("images/edit.png")" title="edit column" /></a></td>
 									</tr>
 								</table>
 								<div>
@@ -173,7 +173,7 @@
 									Data Type: <select ng-model="coulmn.datatype"
 										ng-options="data.name as data.name for data in dataType"></select>
 									<a href="javascript:void(0);" ng-click="addNewColumn()"><img
-										src="images/add.png" title="Add new column" /></a>
+										src="@routes.Assets.at("images/add.png")" title="Add new column" /></a>
 								</div>
 							</div>
 							</td>
@@ -200,7 +200,7 @@
 								</td>
 								<td><a href="javascript:void(0);"
 									ng-click="deleteRow($index,keyspacedata.Table);"><img
-										src="images/delete.png" title="Delete" /></a></td>
+										src="@routes.Assets.at("images/delete.png")" title="Delete" /></a></td>
 							</tr>
 							<tr>
 								<td ng-repeat="header in keyspacedata.metadata">
@@ -208,7 +208,7 @@
 								</td>
 								<td><a href="javascript:void(0);"
 									ng-click="addRow(keyspacedata.tabledata.length,keyspacedata.Table);"><img
-										src="images/add.png" title="Add Row" /></a></td>
+										src="@routes.Assets.at("images/add.png")" title="Add Row" /></a></td>
 							</tr>
 						</table>
 					</div>

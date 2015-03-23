@@ -12,6 +12,7 @@
 <script src="@routes.Assets.at("javascripts/angular.min.js")" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/main.js")" type="text/javascript"></script>
 <script src="@routes.Assets.at("javascripts/jquery.min.js")" type="text/javascript"></script>
+<script src="@routes.Assets.at("javascripts/jquery-ui.min.js")" type="text/javascript"></script>
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("css/styleTab.css")">
 </head>
 <body>
