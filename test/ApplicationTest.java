@@ -46,18 +46,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 */
 public class ApplicationTest {
 
-    @Test
-    public void simpleCheck() {
-        int a = 1 + 1;
-        assertThat(a).isEqualTo(2);
-    }
-
-    @Test
-    public void renderTemplate() {
-        Content html = views.html.index.render("Your new application is ready.");
-        assertThat(contentType(html)).isEqualTo("text/html");
-        assertThat(contentAsString(html)).contains("Your new application is ready.");
-    }
     
         @Test
         public void testConnection(){
@@ -73,21 +61,19 @@ public class ApplicationTest {
             stop(fakeApplication);
         }
         
+        // Unit test create keyspace
         @Test
-        public void testDropKeyspace(){
+        public void testGetKeyspaces(){
         	FakeApplication fakeApplication=fakeApplication();
         	start(fakeApplication);
-        	String nameKeyspace ="UnitTest";
-        	String body = "{\"keyspacename\":\"UnitTest\", \"kclass\":\"SimpleStrategy\", \"replication_factor\":3}";
-            JsonNode json = Json.parse(body);
-            FakeRequest request = new FakeRequest(DELETE, "/keyspace/"+nameKeyspace);
-            Result result = callAction(controllers.routes.ref.Application.deleteKeyspace(nameKeyspace), request);
+            FakeRequest request = new FakeRequest(GET, "/keyspace");
+            Result result = callAction(controllers.routes.ref.Application.getKeyspaces(), request);
             assertThat(status(result)).isEqualTo(OK);
             assertThat(contentType(result)).isEqualTo("application/json");
-            assertThat(contentAsString(result)).contains("");
+            assertThat(contentAsString(result)).contains("system_traces");
+            //assertThat(contentAsString(result)).contains("already exists");
             stop(fakeApplication);
         }
-        
         // Unit test create keyspace
         @Test
         public void testCreateKeyspace(){
@@ -100,8 +86,24 @@ public class ApplicationTest {
             assertThat(status(result)).isEqualTo(OK);
             assertThat(contentType(result)).isEqualTo("application/json");
             assertThat(contentAsString(result)).contains("Added New Keyspace");
+            //assertThat(contentAsString(result)).contains("already exists");
             stop(fakeApplication);
         }
+        
+        @Test
+        public void testDropKeyspace(){
+        	FakeApplication fakeApplication=fakeApplication();
+        	start(fakeApplication);
+        	String nameKeyspace ="UnitTest";
+            FakeRequest request = new FakeRequest(DELETE, "/keyspace/"+nameKeyspace);
+            Result result = callAction(controllers.routes.ref.Application.deleteKeyspace(nameKeyspace), request);
+            assertThat(status(result)).isEqualTo(OK);
+            assertThat(contentType(result)).isEqualTo("application/json");
+            assertThat(contentAsString(result)).contains("");
+            stop(fakeApplication);
+        }
+        
+       
         
         //Unit Test Keyspace Schema
         @Test
@@ -117,9 +119,77 @@ public class ApplicationTest {
             assertThat(contentAsString(result)).contains("{\"columnfamily_name\":\"users\"}");
             stop(fakeApplication);
         }
+        
+        //Unit Test create table
+        @Test
+        public void testCreateTable(){
+        	FakeApplication fakeApplication=fakeApplication();
+        	start(fakeApplication);
+        	String body = "{\"table\":{	\"name\":\"UnitTest\",\"columns\":[{\"name\":\"Title\",\"type\":\"text\"},{\"name\":\"ISBN\",\"type\":\"text\"},{\"name\":\"Author\",\"type\":\"Text\"}],\"primarykeys\":[\"ISBN\"]}}";
+            JsonNode json = Json.parse(body);
+            FakeRequest request = new FakeRequest(POST, "/keyspace/demo/table").withJsonBody(json);
+            Result result = callAction(controllers.routes.ref.Application.createTable("demo"), request);
+            assertThat(status(result)).isEqualTo(OK);
+            assertThat(contentType(result)).isEqualTo("application/json");
+            assertThat(contentAsString(result)).contains("Success");
+            stop(fakeApplication);
+        }
+        
+        //Unit Test Table Metadata
+        @Test
+        public void testTableMetaData(){
+        	FakeApplication fakeApplication=fakeApplication();
+        	start(fakeApplication);
+            FakeRequest request = new FakeRequest(GET, "/keyspace/demo/table/books");
+            Result result = callAction(controllers.routes.ref.Application.describeTable("demo","books"), request);
+            assertThat(status(result)).isEqualTo(OK);
+            assertThat(contentType(result)).isEqualTo("application/json");
+            assertThat(contentAsString(result)).contains("\"column_name\":\"author\"");
+            stop(fakeApplication);
+        }
+        
+        @Test
+        public void testTableData(){
+        	FakeApplication fakeApplication=fakeApplication();
+        	start(fakeApplication);
+            FakeRequest request = new FakeRequest(GET, "/keyspace/demo/table/books/row");
+            Result result = callAction(controllers.routes.ref.Application.getRows("demo","books"), request);
+            assertThat(status(result)).isEqualTo(OK);
+            assertThat(contentType(result)).isEqualTo("application/json");
+            assertThat(contentAsString(result)).contains("\"title\":");
+            stop(fakeApplication);
+        }
+        
+        
+        
+        //Unit Test Drop table
+        @Test
+        public void testDropTable(){
+        	FakeApplication fakeApplication=fakeApplication();
+        	start(fakeApplication);
+            FakeRequest request = new FakeRequest(DELETE, "/keyspace/demo/table/UnitTest");
+            Result result = callAction(controllers.routes.ref.Application.deleteTable("demo","UnitTest"), request);
+            assertThat(status(result)).isEqualTo(OK);
+            assertThat(contentType(result)).isEqualTo("application/json");
+            assertThat(contentAsString(result)).contains("Success");
+            stop(fakeApplication);
+        }
+       
+        
+       
 
 
-
-
+        // Disconnect
+       /* @Test
+        public void closeConnection(){
+        	FakeApplication fakeApplication=fakeApplication();
+        	start(fakeApplication);
+            FakeRequest request = new FakeRequest(DELETE, "/connection");
+            Result result = callAction(controllers.routes.ref.Application.closeCassandra(), request);
+            assertThat(status(result)).isEqualTo(OK);
+            assertThat(contentType(result)).isEqualTo("application/json");
+            assertThat(contentAsString(result)).contains("disconnected Successfully");
+            stop(fakeApplication);
+        }*/
 
 }
