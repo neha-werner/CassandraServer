@@ -12,8 +12,8 @@ import play.libs.F.Promise;
 import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.index;
 
+import views.html.index;
 import cassandraQueryIntf.CassandraConnect;
 import cassandraQueryIntf.CassandraKeyspace;
 
@@ -54,8 +54,13 @@ public class Application extends Controller {
         Promise<Result> result = response.map(new Function<JsonNode, Result>() {
           public Result apply(JsonNode json) {
         	  response().setHeader("Access-Control-Allow-Origin", "*");
-            return ok(json);
+            return created(json);
           }
+        }).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
         });
         return result;
 
@@ -80,6 +85,11 @@ public class Application extends Controller {
         	  response().setHeader("Access-Control-Allow-Origin", "*");
             return ok(json);
           }
+        }).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
         });
         return result;
 
@@ -100,12 +110,17 @@ public class Application extends Controller {
             return cassandraread.getDataFromCassandra();
           }
         });
-
+        
         Promise<Result> result = response.map(new Function<JsonNode, Result>() {
-          public Result apply(JsonNode json) {
+          public Result apply(JsonNode json) throws Throwable {
         	  response().setHeader("Access-Control-Allow-Origin", "*");
-            return ok(json);
+            return created(json);
           }
+        }).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
         });
         return result;
 
@@ -150,8 +165,13 @@ public static Promise<Result> createKeyspace() {
         Promise<Result> result = response.map(new Function<JsonNode, Result>() {
           public Result apply(JsonNode json) {
         	  response().setHeader("Access-Control-Allow-Origin", "*");
-            return ok(json);
+            return created(json);
           }
+        }).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
         });
         return result;
 
@@ -180,6 +200,11 @@ public static Promise<Result> getTableSchema(String keyspace_name) {
         	  response().setHeader("Access-Control-Allow-Origin", "*");
             return ok(json);
           }
+        }).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
         });
         return result;
 
@@ -207,6 +232,11 @@ public static Promise<Result> deleteKeyspace(String keyspace_name) {
         	  response().setHeader("Access-Control-Allow-Origin", "*");
             return ok(json);
           }
+        }).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
         });
         return result;
 
@@ -235,6 +265,11 @@ public static Promise<Result> getKeyspaces() {
         	 response().setHeader("Access-Control-Allow-Origin", "*");
             return ok(json);
           }
+        }).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
         });
         return result;
 
@@ -258,7 +293,12 @@ public static Promise<Result> getKeyspaces() {
 				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
-		});
+		}).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
+        });
 		return result;
 
 	}
@@ -322,9 +362,14 @@ public static Promise<Result> getKeyspaces() {
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
 				response().setHeader("Access-Control-Allow-Origin", "*");
-				return ok(json);
+				return created(json);
 			}
-		});
+		}).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
+        });
 		return result;
 
 	}
@@ -383,7 +428,12 @@ public static Promise<Result> getKeyspaces() {
 				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
-		});
+		}).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
+        });
 		return result;
 
 	}
@@ -446,7 +496,12 @@ public static Promise<Result> getKeyspaces() {
 				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
-		});
+		}).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
+        });
 		return result;
 
 	}
@@ -523,9 +578,14 @@ public static Promise<Result> getKeyspaces() {
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
 				response().setHeader("Access-Control-Allow-Origin", "*");
-				return ok(json);
+				return created(json);
 			}
-		});
+		}).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
+        });
 		return result;
 
 	}
@@ -560,9 +620,14 @@ public static Promise<Result> getKeyspaces() {
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
 				response().setHeader("Access-Control-Allow-Origin", "*");
-				return ok(json);
+				return created(json);
 			}
-		});
+		}).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
+        });
 		return result;
 
 	}
@@ -597,7 +662,12 @@ public static Promise<Result> getKeyspaces() {
 				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
-		});
+		}).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
+        });
 		return result;
 
 	}
@@ -642,9 +712,14 @@ public static Promise<Result> getKeyspaces() {
 		Promise<Result> result = response.map(new Function<JsonNode, Result>() {
 			public Result apply(JsonNode json) {
 				response().setHeader("Access-Control-Allow-Origin", "*");
-				return ok(json);
+				return created(json);
 			}
-		});
+		}).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
+        });
 		return result;
 
 	}
@@ -685,7 +760,12 @@ public static Promise<Result> getKeyspaces() {
 				response().setHeader("Access-Control-Allow-Origin", "*");
 				return ok(json);
 			}
-		});
+		}).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
+        });
 		return result;
 
 	}
@@ -720,7 +800,12 @@ public static Promise<Result> getKeyspaces() {
 			public Result apply(JsonNode json) {
 				return ok(json);
 			}
-		});
+		}).recover(new Function<Throwable,Result>(){
+        	public Result apply(Throwable e){
+        		response().setHeader("Access-Control-Allow-Origin", "*");
+        		return internalServerError(e.toString());
+        	}
+        });
 		return result;
 
 	}

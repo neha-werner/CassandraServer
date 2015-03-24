@@ -7,7 +7,7 @@ app.config(function($httpProvider){
 });
 app.controller('MyController',['$scope','$http', function($scope,$http) {
   $scope.person = {
-    name: "Connect to Cassandra"
+    name: "Connect to Cassandra:"
   };
   $scope.queryString = "";
   $scope.rowValue = [];
@@ -49,6 +49,9 @@ $scope.getAllKeyspaces = function() {
             .success(function(serverResponse, status) {
                 // Updating the $scope postresponse variable to update theview
                 $scope.keyspaces = serverResponse;
+                $scope.error = "";
+            }).error(function(serverResponse, status) {
+            	$scope.error = serverResponse;
             });
 }
 $scope.createTable=function(newTableName){
@@ -72,6 +75,9 @@ $http.post("http://127.0.0.1:9000/keyspace/"+$scope.keyspacedata.name+"/table", 
 		$scope.NewTableName="";
 		$scope.showCreateTable="";
 		$scope.getKeyspaceSchema($scope.keyspacedata.name);
+		$scope.error = "";
+            }).error(function(serverResponse, status) {
+            	$scope.error = serverResponse;
             });
 }
 
@@ -82,13 +88,19 @@ $http.post("http://127.0.0.1:9000/keyspace/"+$scope.keyspacedata.name+"/table/"+
 	$scope.tableMetaData($scope.keyspacedata.Table);
 	$scope.coulmn.name="";
 	$scope.coulmn.datatype="";
-	});
+	$scope.error = "";
+	}).error(function(serverResponse, status) {
+    	$scope.error = serverResponse;
+    });
 }
 
 $scope.deleteColumn=function(columnname){
 $http.delete("http://127.0.0.1:9000/keyspace/"+$scope.keyspacedata.name+"/table/"+$scope.keyspacedata.Table+"/column/"+columnname)
 	.success(function(serverResponse,status){
 		$scope.tableMetaData($scope.keyspacedata.Table);
+		$scope.error = "";
+}).error(function(serverResponse, status) {
+	$scope.error = serverResponse;
 });
 }
 
@@ -98,7 +110,10 @@ $scope.editColumn=function(columnname,datatype){
 	$http.put("http://127.0.0.1:9000/keyspace/"+$scope.keyspacedata.name+"/table/"+$scope.keyspacedata.Table+"/column/"+columnname,dataToPost)
 		.success(function(serverResponse,status){
 			$scope.tableMetaData($scope.keyspacedata.Table);
-		});
+			$scope.error = "";
+		}).error(function(serverResponse, status) {
+        	$scope.error = serverResponse;
+        });
 }
 $scope.connectToDB = function() {
 if($scope.connect=="Connect"){
@@ -108,9 +123,10 @@ var dataToPost = {  hostname:$scope.IP.first+"."+$scope.IP.two+"."+$scope.IP.thr
             .success(function(serverResponse, status) {
                 // Updating the $scope postresponse variable to update theview
                 $scope.person.name = serverResponse;
-		$scope.getAllKeyspaces();
+		$scope.getAllKeyspaces(); 
 		$scope.connect="Disconnect";
 		$scope.showCreateKeyspace=false;
+		$scope.error = "";
             }).error(function(serverResponse, status) {
             	$scope.error = serverResponse;
         		$scope.person.name = serverResponse;
@@ -145,6 +161,7 @@ else
 			$scope.showCreateTable="";
 			$scope.showCreateKeyspace=false;
 			$scope.showTable= false;
+			$scope.error = "";
 		}).error(function(serverResponse, status) {
         	$scope.error = serverResponse;
     		$scope.person.name = serverResponse;
@@ -180,6 +197,7 @@ var dataToPost = {keyspacename:$scope.newKeyspace.scehmaName,
 		$scope.newKeyspace.scehmaName="";
 		$scope.newKeyspace.Replicationfactor="";
 		$scope.getAllKeyspaces();
+		$scope.error = "";
             }).error(function(serverResponse, status) {
             	$scope.error = serverResponse;
             	$scope.keyspacedata.Table = "";
@@ -214,7 +232,7 @@ $scope.getKeyspaceSchema = function(keySpace) {
             .success(function(serverResponse, status) {
                 // Updating the $scope postresponse variable to update theview
                 $scope.columnfamilynames = serverResponse;
-
+                $scope.error = "";
             }).error(function(serverResponse, status) {
             	$scope.error = serverResponse;
             });
@@ -226,6 +244,7 @@ $scope.deleteKeyspace = function(DropKeyspace) {
             .success(function(serverResponse, status) {
                 // Updating the $scope postresponse variable to update theview
                 $scope.getAllKeyspaces();
+                $scope.error = "";
             }).error(function(serverResponse, status) {
             	$scope.error = serverResponse;
         
@@ -241,7 +260,7 @@ $scope.tableMetaData = function(tablename) {
     $http.get("http://127.0.0.1:9000/keyspace/"+$scope.keyspacedata.name+"/table/" + tablename)
             .success(function(serverResponse, status) {
                 // Updating the $scope postresponse variable to update theview
-            	
+            	$scope.error = "";
                 $scope.keyspacedata.metadata = serverResponse;
             }).error(function(serverResponse, status) {
             	$scope.error = serverResponse;
@@ -270,7 +289,7 @@ $scope.getTableData = function(tablename) {
                 // Updating the $scope postresponse variable to update theview
 		$scope.temp=serverResponse;
                 $scope.keyspacedata.tabledata = serverResponse;
-                
+                $scope.error = "";
            }).error(function(serverResponse, status) {
         	    // called asynchronously if an error occurs
         	    // or server returns response with an error status.
@@ -295,6 +314,7 @@ $scope.dropTable = function(index,tablename) {
                 // Updating the $scope postresponse variable to update theview
 		$scope.response=serverResponse;
 		$scope.columnfamilynames.splice(index, 1);//delete the index from view
+		$scope.error = "";
             }).error(function(serverResponse, status) {
     // called asynchronously if an error occurs
     // or server returns response with an error status.
@@ -368,6 +388,7 @@ $scope.deleteRow = function(index,tablename) {
                 // Updating the $scope postresponse variable to update theview
 		$scope.response=serverResponse;
 		$scope.keyspacedata.tabledata.splice(index, 1);//delete the index from view
+		$scope.error = "";
             }).error(function(serverResponse, status) {
     // called asynchronously if an error occurs
     // or server returns response with an error status.
@@ -414,7 +435,7 @@ $scope.addRow = function(index,tablename) {
 						$scope.rowValue[i] = "";//empty the input box
 					}
 					$scope.keyspacedata.tabledata.push(newRow);
-					
+					$scope.error = "";
             }).error(function(serverResponse, status) {
     // called asynchronously if an error occurs
     // or server returns response with an error status.
@@ -484,6 +505,7 @@ $scope.updateRow = function(tablename, column, rowValue) {
 		$scope.response=serverResponse;
 		tableRow[column] = rowValue;//edit the index from view
 		$scope.hideRowEdit();
+		$scope.error = "";
             }).error(function(serverResponse, status) {
     // called asynchronously if an error occurs
     // or server returns response with an error status.
