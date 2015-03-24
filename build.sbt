@@ -1,4 +1,4 @@
-name := "myProject"
+name := "CassandraServer"
 
 version := "1.0-SNAPSHOT"
 

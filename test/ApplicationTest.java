@@ -55,7 +55,7 @@ public class ApplicationTest {
             JsonNode json = Json.parse(body);
             FakeRequest request = new FakeRequest(POST, "/connection").withJsonBody(json);
             Result result = callAction(controllers.routes.ref.Application.connectToCassandra(), request);
-            assertThat(status(result)).isEqualTo(OK);
+            assertThat(status(result)).isEqualTo(CREATED);
             assertThat(contentType(result)).isEqualTo("application/json");
             assertThat(contentAsString(result)).contains("connected Successfully");
             stop(fakeApplication);
@@ -83,7 +83,7 @@ public class ApplicationTest {
             JsonNode json = Json.parse(body);
             FakeRequest request = new FakeRequest(POST, "/keyspace").withJsonBody(json);
             Result result = callAction(controllers.routes.ref.Application.createKeyspace(), request);
-            assertThat(status(result)).isEqualTo(OK);
+            assertThat(status(result)).isEqualTo(CREATED);
             assertThat(contentType(result)).isEqualTo("application/json");
             assertThat(contentAsString(result)).contains("Added New Keyspace");
             //assertThat(contentAsString(result)).contains("already exists");
@@ -116,7 +116,7 @@ public class ApplicationTest {
             Result result = callAction(controllers.routes.ref.Application.getTableSchema("demo"), request);
             assertThat(status(result)).isEqualTo(OK);
             assertThat(contentType(result)).isEqualTo("application/json");
-            assertThat(contentAsString(result)).contains("{\"columnfamily_name\":\"users\"}");
+            assertThat(contentAsString(result)).contains("{\"columnfamily_name\":\"books\"}");
             stop(fakeApplication);
         }
         
@@ -129,7 +129,7 @@ public class ApplicationTest {
             JsonNode json = Json.parse(body);
             FakeRequest request = new FakeRequest(POST, "/keyspace/demo/table").withJsonBody(json);
             Result result = callAction(controllers.routes.ref.Application.createTable("demo"), request);
-            assertThat(status(result)).isEqualTo(OK);
+            assertThat(status(result)).isEqualTo(CREATED);
             assertThat(contentType(result)).isEqualTo("application/json");
             assertThat(contentAsString(result)).contains("Success");
             stop(fakeApplication);
@@ -156,7 +156,7 @@ public class ApplicationTest {
             Result result = callAction(controllers.routes.ref.Application.getRows("demo","books"), request);
             assertThat(status(result)).isEqualTo(OK);
             assertThat(contentType(result)).isEqualTo("application/json");
-            assertThat(contentAsString(result)).contains("\"title\":");
+            assertThat(contentAsString(result)).contains("\"author\":");
             stop(fakeApplication);
         }
         
